@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import * as d3 from 'd3';
 import { fetchData, fetchText, pushText } from './DataFetch';
 
 
