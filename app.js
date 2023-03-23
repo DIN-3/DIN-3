@@ -1,34 +1,34 @@
-const express = require("express");
-const cors = require("cors");
-const fs = require("fs");
+import React, { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+import { fetchData, fetchText, pushText } from './DataFetch';
 
-const app = express();
-app.use(cors());
 
-const csvFiles = ["Polar1.csv", "Polar2.csv"];
+export default function App() {
+  const [data, setData] = useState([]);
 
-const data = {};
+  useEffect(() => {
+    fetchData().then((data) => {
+      setData(data);
+    });
+  }, []);
 
-for (const csvFile of csvFiles) {
-  if (!fs.existsSync(csvFile)) {
-    console.error(`File not found: ${csvFile}`);
-    continue;
-  }
 
-  const csvData = fs.readFileSync(csvFile, "utf-8");
-  data[csvFile] = csvData;
+  return (
+    <View style={styles.container}>
+      <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 30 }}>
+        DIN-3 {data}
+      </Text>
+      <StatusBar style="auto" />
+    </View>
+  );
 }
 
-app.get("/:csvNumber", (req, res) => {
-  const csvNumber = req.params.csvNumber;
-  if (csvNumber < 1 || csvNumber > csvFiles.length) {
-    res.status(404).send(`CSV number ${csvNumber} not found`);
-    return;
-  }
-  const csvFile = csvFiles[csvNumber - 1];
-  res.type("text/plain").send(data[csvFile]);
-});
-
-app.listen(3001, () => {
-  console.log("Server running on http://localhost:3001");
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    paddingTop: 55,
+  },
 });
