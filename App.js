@@ -17,8 +17,10 @@ export default function App() {
     <View style={styles.container}>
       <Text style={{ color: "white", fontWeight: "bold", fontSize: 30 }}>
         DIN-3
-        <Chart data={data} />
       </Text>
+      <View style={styles.chartContainer}>
+        <Chart data={data} />
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -30,5 +32,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     paddingTop: 55,
+  },
+  chartContainer: {
+    width: 1000,
+    height: 1000,
   },
 });

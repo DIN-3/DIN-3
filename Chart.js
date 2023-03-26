@@ -3,107 +3,96 @@ import { View } from "react-native";
 import { Svg, Path, G, Line, Text } from "react-native-svg";
 import * as d3 from "d3";
 import { fetchData } from "./DataFetch";
+import { ResponsiveLine } from "@nivo/line";
 
-const Chart = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const parsedData = await fetchData();
-      setData(parsedData);
-    };
-    getData();
-  }, []);
-
-  const margin = { top: 20, right: 20, bottom: 30, left: 30 };
-  const width = 300;
-  const height = 200;
-
-  const x = d3
-    .scaleLinear()
-    .domain(d3.extent(data, (d) => d.timestamp))
-    .range([margin.left, width - margin.right]);
-
-  const y = d3
-    .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.distance)])
-    .range([height - margin.bottom, margin.top]);
-
-  const line = d3
-    .line()
-    .x((d) => x(d.timestamp))
-    .y((d) => y(d.distance));
-
-  return (
-    <View style={{ backgroundColor: "white" }}>
-      <Svg width={width} height={height}>
-        <G>
-          {/* add grid lines */}
-          <G
-            class="grid"
-            stroke="#ccc"
-            stroke-width="1"
-            opacity="0.2"
-            transform={`translate(0, ${height - margin.bottom})`}
-          >
-            {x.ticks().map((tick) => (
-              <Line
-                key={tick}
-                x1={x(tick)}
-                x2={x(tick)}
-                y2={-height + margin.top + margin.bottom}
-              />
-            ))}
-          </G>
-          <Path d={line(data)} stroke="black" fill="none" strokeWidth="2" />
-          {/* add x axis label */}
-          <Text
-            x={width / 2}
-            y={height - margin.bottom / 2}
-            fill="black"
-            fontSize="12"
-            textAnchor="middle"
-          >
-            Distance
-          </Text>
-          {/* add y axis label */}
-          <Text
-            x={-height / 2}
-            y={margin.left / 2}
-            fill="black"
-            fontSize="12"
-            textAnchor="middle"
-            transform={`rotate(-90, ${-height / 2}, ${margin.left / 2})`}
-          >
-            Time (s)
-          </Text>
-          {/* add chart title */}
-          <Text
-            x={width / 2}
-            y={margin.top / 2}
-            fill="black"
-            fontSize="16"
-            textAnchor="middle"
-          >
-            Performance
-          </Text>
-          {/* add data labels */}
-          {data.map((d) => (
-            <React.Fragment key={d.timestamp}>
-              <Line
-                x1={x(d.timestamp)}
-                y1={y(0)}
-                x2={x(d.timestamp)}
-                y2={y(d.distance)}
-                stroke="white"
-                strokeWidth="1"
-              />
-            </React.Fragment>
-          ))}
-        </G>
-      </Svg>
-    </View>
-  );
-};
+const Chart = ({ data }) => (
+  <ResponsiveLine
+    data={[
+      {
+        id: "distance",
+        data: data.map((d) => ({
+          x: d.timestamp,
+          y: d.distance,
+        })),
+      },
+      {
+        id: "speed",
+        data: data.map((d) => ({
+          x: d.timestamp,
+          y: d.speed,
+        })),
+      },
+      {
+        id: "acceleration",
+        data: data.map((d) => ({
+          x: d.timestamp,
+          y: d.acceleration,
+        })),
+      },
+    ]}
+    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+    xScale={{ type: "point" }}
+    yScale={{
+      type: "linear",
+      min: -10,
+      max: "auto",
+      stacked: true,
+      reverse: false,
+    }}
+    yFormat=" >-.2f"
+    axisTop={null}
+    axisRight={null}
+    axisBottom={{
+      orient: "bottom",
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legend: "Timestamp",
+      legendOffset: 36,
+      legendPosition: "middle",
+    }}
+    axisLeft={{
+      orient: "left",
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legend: "Value",
+      legendOffset: -40,
+      legendPosition: "middle",
+    }}
+    pointSize={10}
+    pointColor={{ theme: "background" }}
+    pointBorderWidth={2}
+    pointBorderColor={{ from: "serieColor" }}
+    pointLabelYOffset={-12}
+    useMesh={true}
+    legends={[
+      {
+        anchor: "bottom-right",
+        direction: "column",
+        justify: false,
+        translateX: 100,
+        translateY: 0,
+        itemsSpacing: 0,
+        itemDirection: "left-to-right",
+        itemWidth: 80,
+        itemHeight: 20,
+        itemOpacity: 0.75,
+        symbolSize: 12,
+        symbolShape: "circle",
+        symbolBorderColor: "rgba(0, 0, 0, .5)",
+        effects: [
+          {
+            on: "hover",
+            style: {
+              itemBackground: "rgba(0, 0, 0, .03)",
+              itemOpacity: 1,
+            },
+          },
+        ],
+      },
+    ]}
+  />
+);
 
 export default Chart;
