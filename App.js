@@ -1,27 +1,78 @@
-import React, { useEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
+import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { fetchData } from "./DataFetch";
-import Chart from "./Chart";
+import { FetchData } from "./DataFetch";
+import {
+  VictoryChart,
+  VictoryTheme,
+  VictoryLine,
+  VictoryTooltip,
+  VictoryVoronoiContainer,
+  VictoryAxis,
+} from "victory-native";
 
 export default function App() {
-  const [data, setData] = useState([]);
-
   useEffect(() => {
-    fetchData().then((data) => {
-      setData(data);
+    FetchData().then((parsedData) => {
+      setData(parsedData);
     });
   }, []);
+  const [data, setData] = useState([]);
+  //console.log("data", data);
 
   return (
-    <View style={styles.container}>
-      <Text style={{ color: "white", fontWeight: "bold", fontSize: 30 }}>
-        DIN-3
-      </Text>
-      <View style={styles.chartContainer}>
-        <Chart data={data} />
-      </View>
-      <StatusBar style="auto" />
+    <View>
+      <VictoryChart
+        width={350}
+        theme={VictoryTheme.material}
+        containerComponent={
+          <VictoryVoronoiContainer
+            labels={({ datum }) =>
+              `Distance (m): ${datum.distance}\nSpeed (m/s): ${datum.speed}`
+            }
+          />
+        }
+      >
+        <VictoryAxis label="Distance" />
+        <VictoryAxis label="Speed" dependentAxis />
+        <VictoryLine
+          y="speed"
+          x="distance"
+          data={data}
+          labelComponent={
+            <VictoryTooltip
+              cornerRadius={0}
+              flyoutStyle={{ stroke: "tomato", strokeWidth: 2 }}
+              style={{ fontSize: 10 }}
+            />
+          }
+        />
+      </VictoryChart>
+      <VictoryChart
+        width={350}
+        theme={VictoryTheme.material}
+        containerComponent={
+          <VictoryVoronoiContainer
+            labels={({ datum }) =>
+              `Timestamp (s): ${datum.timestamp}\nDistance (m): ${datum.distance}`
+            }
+          />
+        }
+      >
+        <VictoryAxis label="Distance" />
+        <VictoryAxis label="Speed" dependentAxis />
+        <VictoryLine
+          y="timestamp"
+          x="distance"
+          data={data}
+          labelComponent={
+            <VictoryTooltip
+              cornerRadius={0}
+              flyoutStyle={{ stroke: "tomato", strokeWidth: 2 }}
+              style={{ fontSize: 10 }}
+            />
+          }
+        />
+      </VictoryChart>
     </View>
   );
 }
@@ -29,12 +80,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    justifyContent: "center",
     alignItems: "center",
-    paddingTop: 55,
-  },
-  chartContainer: {
-    width: 1000,
-    height: 1000,
+    backgroundColor: "#f5fcff",
   },
 });

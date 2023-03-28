@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 
-const dataUrl = "http://localhost:3001/1";
+const dataUrl = "http://192.168.1.65:3001/1";
 
-export const fetchData = async () => {
+export const FetchData = async () => {
   const response = await fetch(dataUrl);
   const rawData = await response.text();
   const parser = d3.dsvFormat(";");
@@ -12,6 +12,6 @@ export const fetchData = async () => {
     speed: +d.speed,
     acceleration: +d.acceleration,
   }));
-  console.log("parsed data", parsedData);
+  //console.log("parsed data", parsedData);
   return parsedData;
 };
