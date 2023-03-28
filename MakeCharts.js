@@ -1,65 +1,47 @@
-import React, { useRef, useEffect, useState } from "react";
-import * as d3 from "d3";
-import { fetchData, fetchText, pushText } from './DataFetch';
+import React, {useState, useRef, useEffect} from 'react';
+import* as d3 from 'd3';
 
-function LineChart({ data }) {
-  const svgRef = useRef(null);
+
+function MakeCharts() {
+  const [data] = useState([25, 50, 35, 15, 95, 19]);
+  const svgRef = useRef();
 
   useEffect(() => {
-    const margin = { top: 10, right: 30, bottom: 30, left: 60 },
-      width = 600 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
-
+    const w = 400;
+    const h = 100;
     const svg = d3.select(svgRef.current)
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr('widght',w)
+      .attr('height', h)
+      .style('background', '#d3d3d3')
+      .style('margin', '50');
 
-    const x = d3.scaleLinear().domain([0, d3.max(data, (d) => d.x)]).range([0, width]);
-    const y = d3.scaleLinear().domain([0, d3.max(data, (d) => d.y)]).range([height, 0]);
+    const xScale = d3.scaleLinear()
+      .domain([0, data.length - 1])
+      .range([0, w]);
+    const yScale = d3.scaleLinear()
+      .domain([0, h])
+      .range([h,0]);
+    const generateScaledLine = d3.line()
+      .x((d, i) => xScale(i))
+      .y(yScale)
+      .curve(d3.curveCardinal);
 
-    const line = d3.line()
-      .x((d) => x(d.x))
-      .y((d) => y(d.y));
 
-    svg.append("path")
-      .datum(data)
-      .attr("class", "line")
-      .attr("d", line);
-
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-    svg.append("g")
-      .call(d3.axisLeft(y));
+      svg.selectAll('.line')
+      .data([data])
+      .join('path')
+      .attr('d', d => generateScaledLine(d))
+      .attr('fill', 'none')
+      .attr('stroke', 'black')
   }, [data]);
 
   return (
-    <svg ref={svgRef}>
-      <style>{`.line { fill: none; stroke: blue; stroke-width: 2px; }`}</style>
-    </svg>
-  );
-}
+    <div className="container">
+      <svg ref={svgRef}></svg>
 
-function MakeChart() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    d3.csv("D:/Polar/DIN-3/Polar1.csv", (d) => {
-      return { x: +d.column1, y: +d.column3 };
-    }).then((data) => {
-      setData(data);
-    });
-  }, []);
-
-  return (
-    <div>
-      <h1>Line Chart Example</h1>
-      <LineChart data={data} />
     </div>
-  );
+  )
 }
 
 
-export default MakeChart;
+export default MakeCharts;
