@@ -27,7 +27,7 @@ export default function App() {
         containerComponent={
           <VictoryVoronoiContainer
             labels={({ datum }) =>
-              `Distance (m): ${datum.distance}\nSpeed (m/s): ${datum.speed}`
+              `Distance (m): ${datum.distance}\nSpeed (m/s): ${datum.speed}\nTimestamp: ${datum.timestamp}`
             }
           />
         }
@@ -35,8 +35,8 @@ export default function App() {
         <VictoryAxis label="Distance" />
         <VictoryAxis label="Speed" dependentAxis />
         <VictoryLine
-          y="speed"
-          x="distance"
+          y="distance"
+          x="speed"
           data={data}
           labelComponent={
             <VictoryTooltip
@@ -53,7 +53,7 @@ export default function App() {
         containerComponent={
           <VictoryVoronoiContainer
             labels={({ datum }) =>
-              `Timestamp (s): ${datum.timestamp}\nDistance (m): ${datum.distance}`
+              `Timestamp (s): ${datum.timestamp}\nDistance (m): ${datum.distance}\nTimestamp: ${datum.timestamp}`
             }
           />
         }
@@ -61,8 +61,8 @@ export default function App() {
         <VictoryAxis label="Distance" />
         <VictoryAxis label="Speed" dependentAxis />
         <VictoryLine
-          y="timestamp"
-          x="distance"
+          y="speed"
+          x="timestamp"
           data={data}
           labelComponent={
             <VictoryTooltip

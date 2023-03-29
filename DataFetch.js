@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-const dataUrl = "http://192.168.1.65:3001/1";
+const dataUrl = "http://192.168.1.65:3001/Sprint/b_20m_2.csv";
 
 export const FetchData = async () => {
   const response = await fetch(dataUrl);
@@ -13,5 +13,6 @@ export const FetchData = async () => {
     acceleration: +d.acceleration,
   }));
   //console.log("parsed data", parsedData);
+  //console.log("raw data", rawData);
   return parsedData;
 };
