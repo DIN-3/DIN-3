@@ -16,7 +16,7 @@ export default function TestContainer({ navigation, route }) {
   }, [title]);
 
   const handleOptionSelect = (option) => {
-    if (selectedOptions.length < 2) {
+    if (selectedOptions.length < 3) {
       setSelectedOptions([...selectedOptions, option]);
     } else {
       setSelectedOptions([option]);
@@ -36,7 +36,20 @@ export default function TestContainer({ navigation, route }) {
         test2: link2,
         title2: title2,
       });
-    }
+    } else if (selectedOptions.length === 3) {
+      const { title: title1, link: link1 } = selectedOptions[0];
+      const { title: title2, link: link2 } = selectedOptions[1];
+      const { title: title3, link: link3 } = selectedOptions[2];  
+      navigation.navigate("Charts", {
+        test: link1,
+        title: title1,
+        test2: link2,
+        title2: title2,
+        test3: link3,
+        title3: title3,
+
+      });
+    } 
   };
 
 
