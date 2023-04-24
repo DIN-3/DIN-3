@@ -26,7 +26,7 @@ React-native based application which fetches sporting data from a database and v
     
 ## Documentation
 
--API
+- API
 https://github.com/DIN-3/DIN3-API
 ***
 - Calendar
