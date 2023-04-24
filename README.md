@@ -4,6 +4,13 @@
 React-native based application which fetches sporting data from a database and visualizes it.
 
 
+## Features
+
+- Visualizing sporting data
+- Charting multiple datasets pulled from database
+- Cross platform
+
+
 ## Installation
 
 ```bash
@@ -33,13 +40,6 @@ React-native based application which fetches sporting data from a database and v
 ***
 - Notes
 ***
-
-
-## Features
-
-- Visualizing sporting data
-- Charting multiple datasets pulled from database
-- Cross platform
 
 
 ## Authors
