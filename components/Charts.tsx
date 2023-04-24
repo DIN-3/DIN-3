@@ -79,19 +79,24 @@ export default function HistoryContainer({route, navigation}, props: Props) {
       </TouchableOpacity>
       
       {test2 ? (
-      <>
+        <>
           <Text style={{color: 'white'}}>
             {test} as red
           </Text>
           <Text style={{color: 'white'}}>
             {test2} as green
           </Text>
-      </>
-        ) : (
-          <Text style={{color: 'white'}}>
-            {test} as red
-          </Text>
-        )}
+          {test3 && (
+            <Text style={{color: 'white'}}>
+              {test3} as yellow
+            </Text>
+          )}
+        </>
+      ) : (
+        <Text style={{color: 'white'}}>
+          {test} as red
+        </Text>
+      )}
 
       {isLoading ? (
           <Text style={{ color: "white" }}>Loading...</Text>
