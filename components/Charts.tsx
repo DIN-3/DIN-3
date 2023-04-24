@@ -19,9 +19,11 @@ interface Props {}
 
 export default function HistoryContainer({route, navigation}, props: Props) {
   const [data1, setData1] = useState([]);
-  const [data2, setData2] = useState([]);//data2 is green
+  const [data2, setData2] = useState([]);
+  const [data3, setData3] = useState([]);
   const { test, title } = route.params;
   const { test2, } = route.params;
+  const { test3,} = route.params;
   const [isLoading, setIsLoading] = useState(true);
 
   
@@ -29,7 +31,7 @@ export default function HistoryContainer({route, navigation}, props: Props) {
   
   useEffect(() => {
     setIsLoading(true);
-    FetchData(test, title).then((parsedData) => {
+    FetchData(test, title, ).then((parsedData) => {
       setData1(parsedData);
       setIsLoading(false);
     });
@@ -37,7 +39,11 @@ export default function HistoryContainer({route, navigation}, props: Props) {
     FetchData(test2, title).then((parsedData) => {
       setData2(parsedData);
     });
-  }, [test, test2]);
+    FetchData(test3, title).then((parsedData) => {
+      setData3(parsedData);
+    });
+
+  }, [test, test2, test3,]);
 
   const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 
@@ -59,6 +65,7 @@ export default function HistoryContainer({route, navigation}, props: Props) {
           navigation.navigate("History", {title: title})
           setData1([]);
           setData2([]);
+          setData3([]);
           console.log("data cleared");
         }}
         style={{
@@ -72,19 +79,24 @@ export default function HistoryContainer({route, navigation}, props: Props) {
       </TouchableOpacity>
       
       {test2 ? (
-      <>
+        <>
           <Text style={{color: 'white'}}>
             {test} as red
           </Text>
           <Text style={{color: 'white'}}>
             {test2} as green
           </Text>
-      </>
-        ) : (
-          <Text style={{color: 'white'}}>
-            {test} as red
-          </Text>
-        )}
+          {test3 && (
+            <Text style={{color: 'white'}}>
+              {test3} as yellow
+            </Text>
+          )}
+        </>
+      ) : (
+        <Text style={{color: 'white'}}>
+          {test} as red
+        </Text>
+      )}
 
       {isLoading ? (
           <Text style={{ color: "white" }}>Loading...</Text>
@@ -147,6 +159,21 @@ export default function HistoryContainer({route, navigation}, props: Props) {
                 },
               }}
             />
+
+            <VictoryLine  // Yellow
+              y="speed"
+              x="distance"
+              data={data3}
+              style={{
+                data: {
+                  stroke: "rgb(255, 255, 0)",
+                  strokeWidth: 2,
+                  strokeLinecap: "round",
+                },
+              }}
+            />
+
+  
           </VictoryChart>
         )}
   
